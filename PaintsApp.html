@@ -1,0 +1,95 @@
+<html>
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width-device-width, initial-scale=1.0">
+	<title>Paint App</title>
+	<link rel="stylesheet" href="style.css">
+	</head>
+<body>
+	<h1 align="center">Let's Paint!</h1>
+	<div class="painter">
+		<canvas width="1000px" height ="500px" id= "paint"></canvas>
+		<div id = "buttonPlate">
+		<button onclick="NewPage()" style= "padding:10px; border:2px solid blue; background-color: white "><img src="new.jpg" height="30px" width="30px"  /></button>
+		<button onclick="Razor()" style= "padding:10px; border:2px solid blue;  background-color: white"><img src="razor.jpg" height="30px" width="30px"/></button>
+		<button onclick="BlackPen()" style= "padding:10px; border:2px solid black;"><img src="brush.png" style = "height:30px; width:30px; "/></button>
+		<button onclick="RedPen()" style= "padding:10px; border:2px solid red;background-color: red"><img src="brush.png" style = "height:30px; width:30px;"/></button>
+		<button onclick="BluePen()"style= "padding:10px;border:2px solid blue; background-color: blue"><img src="brush.png" style = "height:30px; width:30px; "/></button>
+		<button onclick="YellowPen()" style= "padding:10px;border:2px solid yellow;  background-color: yellow"><img src="brush.png" style = "height:30px; width:30px;"/></button><br><br>
+		<label>Brush Size: </label> <input type="range" id="pensize" value ="5" min="5" max="30" name="pensize" onchange= "penSizeChange()"/>
+		</div>
+	</div>
+	
+	<script>
+	let penSize = 5;
+	let paint = document.querySelector('#paint')
+	let canv = paint.getContext("2d");
+	let x=0;
+	let y=0;
+	let rect = paint.getBoundingClientRect();
+	let style = "#000";
+	let isDrawing = false;
+	
+	paint.addEventListener('mousedown', e => {
+		x = e.clientX - rect.left;
+		y = e.clientY - rect.top;
+		isDrawing = true;
+	})
+	
+	paint.addEventListener('mousemove', e => {
+	if(isDrawing === true){
+	lineDraw(canv, x, y, e.clientX - rect.left, e.clientY - rect.top, style);
+		x= e.clientX - rect.left;
+		y= e.clientY - rect.top;
+		}
+	})
+	
+	paint.addEventListener('mouseup', e => {
+		x= e.clientX - rect.left;
+		y= e.clientY - rect.top;
+		isDrawing = false;
+		x=0;
+		y=0;
+	})
+	
+	
+	function BlackPen(){
+	style = "#000000";
+	}
+	function BluePen(){
+	style = "#0000FF";
+	}
+	function RedPen(){
+	style = "#FF0000";
+	}
+	function YellowPen(){
+	style = "#FFFF00";
+	}
+	function Razor(){
+	style = "#FFFFFF";
+	}
+	function NewPage(){
+		canv.clearRect(0, 0, paint.width, paint.height);
+	}
+	
+	function lineDraw(canv,x1,y1,x2,y2,styleColor, penSize){
+	canv.beginPath();
+	canv.strokeStyle = styleColor;
+	canv.lineWidth = penSizeChange();
+	canv.moveTo(x1,y1);
+	canv.lineTo(x2,y2);
+	canv.lineCap = canv.lineJoin = 'round';
+	canv.shadowColor = styleColor;
+	canv.stroke();
+	canv.closePath();
+	}
+	
+	function penSizeChange(){
+	penSize=document.getElementById("pensize").value; 
+	return penSize;
+	}
+	
+	
+	</script>
+</body>
+</html>
